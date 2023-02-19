@@ -11,9 +11,6 @@
     "test:watch": "vitest",
     "with-env": "dotenv -c -e ../../.env --"
   },
-  "prisma": {
-    "schema": "db/schema.prisma"
-  },
   "prettier": {
     "semi": false,
     "printWidth": 100
