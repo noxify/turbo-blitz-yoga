@@ -13,6 +13,24 @@
       ],
       "cache": false
     },
+    "db:migrate:dev": {
+      "inputs": [
+        "prisma/schema.prisma"
+      ],
+      "cache": false
+    },
+    "db:migrate:create": {
+      "inputs": [
+        "prisma/schema.prisma"
+      ],
+      "cache": false
+    },
+    "db:migrate:deploy": {
+      "inputs": [
+        "prisma/schema.prisma"
+      ],
+      "cache": false
+    },
     "dev": {
       "persistent": true,
       "cache": false

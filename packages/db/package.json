@@ -8,11 +8,11 @@
     "clean": "rm -rf .turbo node_modules",
     "db:generate": "pnpm with-env prisma generate",
     "db:push": "pnpm with-env prisma db push --skip-generate",
-    "db:migrate:dev": "pnpm with-env prisma db migrate dey --skip-generate",
-    "db:migrate:create": "pnpm with-env prisma db migrate dev --create-only --skip-generate",
-    "db:migrate:deploy": "pnpm with-env prisma db migrate deploy --skip-generate",
+    "db:migrate:dev": "pnpm with-env prisma migrate dev --name $(date +%s) --skip-generate",
+    "db:migrate:create": "pnpm with-env prisma migrate dev --name $(date +%s) --create-only --skip-generate",
+    "db:migrate:deploy": "pnpm with-env prisma migrate deploy --skip-generate",
     "dev": "pnpm with-env prisma studio --port 5556",
-    "with-env": "dotenv -e ../../.env --"
+    "with-env": "dotenv -c -e ../../.env --"
   },
   "dependencies": {
     "@prisma/client": "4.10.1"
