@@ -11,7 +11,7 @@
     "db:migrate:dev": "pnpm with-env prisma migrate dev --name $(date +%s) --skip-generate",
     "db:migrate:create": "pnpm with-env prisma migrate dev --name $(date +%s) --create-only --skip-generate",
     "db:migrate:deploy": "pnpm with-env prisma migrate deploy --skip-generate",
-    "dev": "pnpm with-env prisma studio --port 5556",
+    "db:studio": "pnpm with-env prisma studio --port 5556",
     "with-env": "dotenv -c -e ../../.env --"
   },
   "dependencies": {
