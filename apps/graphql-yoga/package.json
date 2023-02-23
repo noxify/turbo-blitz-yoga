@@ -1,0 +1,52 @@
+{
+  "name": "graphql-yoga",
+  "version": "1.0.0",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "dev": "pnpm with-env tsx watch src/server.ts",
+    "build": "pnpm with-env tsc && tsc-alias",
+    "start": "node dist/server.js",
+    "lint": "SKIP_ENV_VALIDATION=1 eslint \"{src,apps,libs,tests}/**/*.ts\"",
+    "lint:fix": "SKIP_ENV_VALIDATION=1 eslint \"{src,apps,libs,tests}/**/*.ts\" --fix",
+    "lint:types": "SKIP_ENV_VALIDATION=1 tsc --pretty --noEmit",
+    "lint:all": "SKIP_ENV_VALIDATION=1 pnpm run lint:fix && pnpm run lint:types",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "with-env": "dotenv -c -e ../../.env --"
+  },
+  "prettier": {
+    "semi": false,
+    "printWidth": 100
+  },
+  "lint-staged": {
+    "*.{js,ts,tsx}": [
+      "eslint --fix"
+    ]
+  },
+  "dependencies": {
+    "@acme/db": "*",
+    "@envelop/core": "3.0.6",
+    "zod": "3.20.6",
+    "@graphql-yoga/render-graphiql": "3.7.0",
+    "@pothos/core": "3.26.0",
+    "graphql": "16.6.0",
+    "graphql-scalars": "1.20.1",
+    "graphql-yoga": "3.7.0"
+  },
+  "devDependencies": {
+    "dotenv-cli": "7.0.0",
+    "@types/node": "18.14.0",
+    "@typescript-eslint/eslint-plugin": "5.53.0",
+    "@typescript-eslint/parser": "5.53.0",
+    "eslint": "8.34.0",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-unused-imports": "2.0.0",
+    "prettier": "2.8.4",
+    "tsc-alias": "1.8.2",
+    "tsx": "3.12.3",
+    "typescript": "4.9.5",
+    "vitest": "0.28.5"
+  },
+  "private": true
+}

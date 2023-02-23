@@ -2,7 +2,7 @@ import { SecurePassword } from "@blitzjs/auth"
 import { resolver } from "@blitzjs/rpc"
 import { AuthenticationError } from "blitz"
 import db from "db"
-import { Role } from "types"
+import { defineAbilitiesFor, Roles } from "@acme/permissions"
 import { Login } from "../validations"
 
 export const authenticateUser = async (rawEmail: string, rawPassword: string) => {
@@ -26,7 +26,8 @@ export default resolver.pipe(resolver.zod(Login), async ({ email, password }, ct
   // This throws an error if credentials are invalid
   const user = await authenticateUser(email, password)
 
-  await ctx.session.$create({ userId: user.id, role: user.role as Role })
+  await ctx.session.$create({ userId: user.id, role: user.role as Roles })
+  ctx.session.$setPrivateData({ ability: defineAbilitiesFor(user) })
 
   return user
 })
