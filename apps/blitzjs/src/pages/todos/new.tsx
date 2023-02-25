@@ -1,12 +1,12 @@
-import {Routes} from '@blitzjs/next'
-import Link from 'next/link'
+import { BlitzPage, Routes } from "@blitzjs/next"
+import Link from "next/link"
 import { useRouter } from "next/router"
-import {useMutation} from '@blitzjs/rpc'
+import { useMutation } from "@blitzjs/rpc"
 import Layout from "src/core/layouts/Layout"
 import createTodo from "src/todos/mutations/createTodo"
-import {TodoForm, FORM_ERROR} from "src/todos/components/TodoForm"
+import { TodoForm, FORM_ERROR } from "src/todos/components/TodoForm"
 
-const NewTodoPage = () => {
+const NewTodoPage: BlitzPage = () => {
   const router = useRouter()
   const [createTodoMutation] = useMutation(createTodo)
 
@@ -23,12 +23,8 @@ const NewTodoPage = () => {
         // initialValues={{}}
         onSubmit={async (values) => {
           try {
-            const todo = await createTodoMutation(
-              values,
-            )
-            await router.push(
-              Routes.ShowTodoPage({ todoId: todo.id }),
-            )
+            const todo = await createTodoMutation(values)
+            await router.push(Routes.ShowTodoPage({ todoId: todo.id }))
           } catch (error: any) {
             console.error(error)
             return {
@@ -39,12 +35,10 @@ const NewTodoPage = () => {
       />
 
       <p>
-        <Link href={Routes.TodosPage()}>
-          Todos
-        </Link>
+        <Link href={Routes.TodosPage()}>Todos</Link>
       </p>
     </Layout>
-  );
+  )
 }
 
 NewTodoPage.authenticate = true

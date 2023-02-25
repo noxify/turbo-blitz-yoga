@@ -1,7 +1,6 @@
 import { resolver } from "@blitzjs/rpc"
 import db from "db"
 import { GuardHandler } from "@acme/guard"
-import { checkPermissionPipe } from "src/casl"
 import { z } from "zod"
 const UpdateTodo = z.object({
   id: z.number(),

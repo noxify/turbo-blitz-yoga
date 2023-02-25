@@ -1,5 +1,5 @@
 import { JSXElementConstructor, ReactElement, ReactFragment, ReactPortal, Suspense } from "react"
-import { Routes } from "@blitzjs/next"
+import { BlitzPage, Routes } from "@blitzjs/next"
 import Head from "next/head"
 import Link from "next/link"
 import { useRouter } from "next/router"
@@ -76,7 +76,7 @@ export const EditTodo = () => {
   )
 }
 
-const EditTodoPage = () => {
+const EditTodoPage: BlitzPage = () => {
   return (
     <div>
       <Suspense fallback={<div>Loading...</div>}>
@@ -92,8 +92,6 @@ const EditTodoPage = () => {
 
 EditTodoPage.authenticate = true
 
-EditTodoPage.getLayout = (page: ReactElement<any, string | JSXElementConstructor<any>>) => (
-  <Layout>{page}</Layout>
-)
+EditTodoPage.getLayout = (page) => <Layout>{page}</Layout>
 
 export default EditTodoPage

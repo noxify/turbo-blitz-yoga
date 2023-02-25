@@ -48,6 +48,7 @@ const generateComparison = ({
       } = {}
 
       for (const operatorKey of operatorKeys) {
+        //@ts-expect-error
         availableOperators[operatorKey] = operators[operatorKey]
       }
 
