@@ -42,7 +42,7 @@ export const EditTodo = () => {
       </Head>
 
       <div>
-        <p>Can update this record: {canUpdateTodo.can ? "" : canUpdateTodo.reason}</p>
+        <p>Can update this record: {canUpdateTodo.can ? "Yes" : "No"}</p>
 
         <h1>Edit Todo {todo.id}</h1>
         <pre>{JSON.stringify(todo, null, 2)}</pre>

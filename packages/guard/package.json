@@ -37,7 +37,6 @@
   "homepage": "https://github.com/ntgussoni/blitz-guard#readme",
   "dependencies": {
     "@acme/db": "*",
-    "blitz": "2.0.0-beta.23",
     "runtypes": "6.6.0"
   },
   "devDependencies": {

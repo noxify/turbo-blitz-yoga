@@ -1,7 +1,7 @@
-import { AuthorizationError, PromiseReturnType } from "blitz"
 import { Static } from "runtypes"
 import { All, BasicAbilities } from "./const"
 import { Guard } from "./guard"
+import { AuthorizationError } from "./GuardAuthorizationError"
 
 export type SessionContext = {
   userId: number
@@ -11,6 +11,12 @@ export type SessionContext = {
 export type Ctx = {
   session: SessionContext
 }
+
+export type Await<T> = T extends PromiseLike<infer U> ? U : T
+
+export type PromiseReturnType<T extends (...args: any) => Promise<any>> = Await<
+  ReturnType<T>
+>
 
 export type AbilityType<IAbility> = Static<typeof BasicAbilities> | IAbility
 
@@ -94,7 +100,7 @@ export interface IGuardAuthorizationError<IResource, IAbility>
 export interface IAuthorize<IResource, IAbility> {
   <
     U,
-    W extends Promise<any>,
+    W extends Promise<unknown>,
     R extends (args: U, ctx: Ctx) => W,
     TResult = PromiseReturnType<R>,
   >(
@@ -108,7 +114,7 @@ export interface IAuthorizePipe<IResource, IAbility> {
   <U, C = Ctx>(
     ability: AbilityType<IAbility>,
     resource: ResourceType<IResource>,
-  ): (input: U, ctx: C) => Promise<U>
+  ): (input: U, ctx: Ctx) => Promise<U>
 }
 
 export type useGuardInputType<IResource, IAbility> = [

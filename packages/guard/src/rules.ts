@@ -6,11 +6,6 @@ type ExtendedAbilityTypes = ""
 
 const GuardHandler = GuardBuilder<ExtendedResourceTypes, ExtendedAbilityTypes>(
   async (ctx, { can, cannot }) => {
-    console.log({
-      isAuthorized: ctx.session.$isAuthorized(),
-      userId: ctx.session.userId,
-      userRole: ctx.session.role,
-    })
     cannot("manage", "all")
 
     if (ctx.session.$isAuthorized() == true) {
@@ -24,10 +19,10 @@ const GuardHandler = GuardBuilder<ExtendedResourceTypes, ExtendedAbilityTypes>(
           can("create", "Todo")
           can("read", "Todo")
           can("update", "Todo", async (_args) => {
-            console.log("Can Update Guard - Args: ", { _args })
             return (
               (await db.todo.count({
                 where: {
+                  //userId: { not: { equals: ctx.session.userId } },
                   userId: { equals: ctx.session.userId },
                   id: { equals: _args.id as number },
                 },

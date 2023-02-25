@@ -1,6 +1,8 @@
+import SuperJson from "superjson"
 import { authorizeInit } from "./authorizeInit"
 import { All, Manage } from "./const"
 import { getAbilityInit } from "./getAbility"
+import { GuardAuthorizationError } from "./GuardAuthorizationError"
 import {
   AbilityType,
   CanType,
@@ -12,8 +14,6 @@ import {
   _CannotType,
   _CanType,
 } from "./types"
-// import SuperJson from "superjson"
-// import { GuardAuthorizationError } from "./GuardAuthorizationError"
 
 const isAbility = <T>(ruleAbility: AbilityType<T>, ability: AbilityType<T>) =>
   ruleAbility === ability || ruleAbility === Manage.value
@@ -120,8 +120,8 @@ export function GuardBuilder<T = any, R = any>(
   const { authorize, authorizePipe } = authorizeInit<T, R>(instance)
   const getAbility = getAbilityInit<T, R>(instance)
 
-  // SuperJson.registerClass(GuardAuthorizationError)
-  // SuperJson.allowErrorProps("rule")
+  SuperJson.registerClass(GuardAuthorizationError)
+  SuperJson.allowErrorProps("rule")
 
   return {
     instance,
