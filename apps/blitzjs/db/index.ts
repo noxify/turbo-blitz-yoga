@@ -1,8 +1,3 @@
-import { enhancePrisma } from "blitz"
-import { PrismaClient } from "@acme/db"
-
-const EnhancedPrisma = enhancePrisma(PrismaClient)
-
+import { PrismaClient, enhancePrisma, db } from "@acme/db"
 export * from "@acme/db"
-const db = new EnhancedPrisma()
 export default db

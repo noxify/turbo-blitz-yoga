@@ -1,28 +1,30 @@
+import { authorizeInit } from "./authorizeInit"
+import { All, Manage } from "./const"
+import { getAbilityInit } from "./getAbility"
 import {
   AbilityType,
   CanType,
   IAbilities,
   IGuard,
   IGuardBuilder,
+  IRule,
   ResourceType,
   _CannotType,
   _CanType,
-  IRule,
 } from "./types"
-import { Manage, All } from "./const"
-import { authorizeInit } from "./authorizeInit"
-import { getAbilityInit } from "./getAbility"
 // import SuperJson from "superjson"
 // import { GuardAuthorizationError } from "./GuardAuthorizationError"
 
 const isAbility = <T>(ruleAbility: AbilityType<T>, ability: AbilityType<T>) =>
   ruleAbility === ability || ruleAbility === Manage.value
 
-const isResource = <T>(ruleResource: ResourceType<T>, resource: ResourceType<T>) =>
-  ruleResource === resource || ruleResource === All.value
+const isResource = <T>(
+  ruleResource: ResourceType<T>,
+  resource: ResourceType<T>,
+) => ruleResource === resource || ruleResource === All.value
 
 class Rule<IResource, IAbility> implements IRule<IResource, IAbility> {
-  public reasonText: string = ""
+  public reasonText = ""
 
   constructor(
     public behavior: boolean,
@@ -55,15 +57,18 @@ export class Guard<T, R> implements IGuard<T, R> {
         cannot: this._cannot,
       })
     } catch (e) {
-      throw new Error(`GUARD: You should not throw errors in the ability file \n\r ${e}`)
+      throw new Error(
+        `GUARD: You should not throw errors in the ability file \n\r ${e}`,
+      )
     }
 
     let can = true
     let reason = ""
     for (let i = 0; i < this.rules.length; i++) {
-      const rule = this.rules[i]
+      const rule = this.rules[i] as IRule<T, R>
 
-      const matchAll = rule.resource === All.value && rule.ability === Manage.value
+      const matchAll =
+        rule?.resource === All.value && rule.ability === Manage.value
 
       if (matchAll) {
         can = rule.behavior
@@ -71,7 +76,10 @@ export class Guard<T, R> implements IGuard<T, R> {
         break
       }
 
-      if (isResource(rule.resource, resource) && isAbility(rule.ability, ability)) {
+      if (
+        isResource(rule.resource, resource) &&
+        isAbility(rule.ability, ability)
+      ) {
         if (rule.guard) {
           if (await rule.guard(args)) {
             can = rule.behavior
@@ -105,7 +113,9 @@ export class Guard<T, R> implements IGuard<T, R> {
   }
 }
 
-export function GuardBuilder<T = any, R = any>(ability: IAbilities<T, R>): IGuardBuilder<T, R> {
+export function GuardBuilder<T = any, R = any>(
+  ability: IAbilities<T, R>,
+): IGuardBuilder<T, R> {
   const instance = new Guard<T, R>(ability)
   const { authorize, authorizePipe } = authorizeInit<T, R>(instance)
   const getAbility = getAbilityInit<T, R>(instance)

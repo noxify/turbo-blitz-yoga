@@ -1,7 +1,16 @@
-import { AuthorizationError, Ctx, PromiseReturnType } from "blitz"
-import { All, BasicAbilities } from "./const"
+import { AuthorizationError, PromiseReturnType } from "blitz"
 import { Static } from "runtypes"
+import { All, BasicAbilities } from "./const"
 import { Guard } from "./guard"
+
+export type SessionContext = {
+  userId: number
+  role: string
+  $isAuthorized: () => boolean
+}
+export type Ctx = {
+  session: SessionContext
+}
 
 export type AbilityType<IAbility> = Static<typeof BasicAbilities> | IAbility
 
@@ -78,11 +87,17 @@ export type IGuardAuthErrorProps<IResource, IAbility> = {
   reason?: string
 }
 
-export interface IGuardAuthorizationError<IResource, IAbility> extends AuthorizationError {
+export interface IGuardAuthorizationError<IResource, IAbility>
+  extends AuthorizationError {
   rule: { ability: AbilityType<IAbility>; resource: ResourceType<IResource> }
 }
 export interface IAuthorize<IResource, IAbility> {
-  <U, W extends Promise<any>, R extends (args: U, ctx: Ctx) => W, TResult = PromiseReturnType<R>>(
+  <
+    U,
+    W extends Promise<any>,
+    R extends (args: U, ctx: Ctx) => W,
+    TResult = PromiseReturnType<R>,
+  >(
     ability: AbilityType<IAbility>,
     resource: ResourceType<IResource>,
     resolver: (args: U, ctx: Ctx) => W,
@@ -90,10 +105,10 @@ export interface IAuthorize<IResource, IAbility> {
 }
 
 export interface IAuthorizePipe<IResource, IAbility> {
-  <U, C = Ctx>(ability: AbilityType<IAbility>, resource: ResourceType<IResource>): (
-    input: U,
-    ctx: C,
-  ) => Promise<U>
+  <U, C = Ctx>(
+    ability: AbilityType<IAbility>,
+    resource: ResourceType<IResource>,
+  ): (input: U, ctx: C) => Promise<U>
 }
 
 export type useGuardInputType<IResource, IAbility> = [
