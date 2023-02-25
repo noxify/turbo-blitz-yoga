@@ -1,13 +1,13 @@
 import { SimpleRolesIsAuthorized } from "@blitzjs/auth"
 import { User } from "db"
-import { Roles } from "@acme/permissions"
+import { AnyMongoAbility, Roles } from "@acme/permissions"
 
 declare module "@blitzjs/auth" {
   export interface Session {
-    isAuthorized: SimpleRolesIsAuthorized<Roles>
+    isAuthorized: AnyMongoAbility
     PublicData: {
       userId: User["id"]
-      role: Roles
+      role: string
     }
   }
 }

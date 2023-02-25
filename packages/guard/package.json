@@ -1,0 +1,54 @@
+{
+  "name": "@acme/guard",
+  "version": "0.4.1",
+  "description": "Based on blitz-guard but extended to work also with graphql-yoga",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "dev": "pnpm run build -- --watch",
+    "build": "tsup src/index.ts --format cjs --dts",
+    "lint": "SKIP_ENV_VALIDATION=1 eslint \"{src,apps,libs,tests}/**/*.ts\"",
+    "test": "vitest run --passWithNoTests",
+    "test:watch": "vitest",
+    "with-env": "dotenv -c -e ../../.env --"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.esm.js",
+  "types": "dist/index.d.ts",
+  "middleware": "dist/middleware.js",
+  "files": [
+    "dist"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ntgussoni/blitz-guard.git"
+  },
+  "keywords": [
+    "blitz",
+    "blitzjs",
+    "guard",
+    "cancan",
+    "authorization"
+  ],
+  "author": "Nicolas Torres <ntorres.dev@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ntgussoni/blitz-guard/issues"
+  },
+  "homepage": "https://github.com/ntgussoni/blitz-guard#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "dotenv-cli": "7.0.0",
+    "@types/node": "18.14.0",
+    "tsx": "3.12.3",
+    "@types/react-dom": "17.0.9",
+    "react": "17.0.2",
+    "react-dom": "17.0.2",
+    "react-test-renderer": "^17.0.2",
+    "superjson": "1.12.2",
+    "prettier": "2.8.4",
+    "tsc-alias": "1.8.2",
+    "typescript": "4.9.5",
+    "vitest": "0.28.5",
+    "tsup": "6.6.3"
+  }
+}

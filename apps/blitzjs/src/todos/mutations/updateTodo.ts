@@ -1,19 +1,21 @@
 import { resolver } from "@blitzjs/rpc"
 import db from "db"
+import { checkPermissionPipe } from "src/casl"
 import { z } from "zod"
 
 const UpdateTodo = z.object({
   id: z.number(),
+  userId: z.number(),
   title: z.string(),
 })
 
 export default resolver.pipe(
   resolver.zod(UpdateTodo),
   resolver.authorize(),
+  checkPermissionPipe("update", "Todo"),
   async ({ id, ...data }) => {
-    // TODO: in multi-tenant app, you must add validation to ensure correct tenant
-    const todo = await db.todo.update({ where: { id }, data })
+    const updateTodo = await db.todo.update({ where: { id }, data })
 
-    return todo
+    return updateTodo
   }
 )

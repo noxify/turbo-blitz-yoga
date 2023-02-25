@@ -1,13 +1,15 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./",
     "outDir": "./dist/",
-    "noImplicitAny": false,
+    "downlevelIteration": true,
     "typeRoots": ["./types", "./node_modules/@types"],
     "paths": {
-      "src/*": ["./src/*"]
-    }
+      "src/*": ["src/*"]
+    },
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
   "include": ["src/**/*", "types/*.d.ts", "types/*.ts"],
   "exclude": ["node_modules", "dist", "**/*spec.ts", "tests"]

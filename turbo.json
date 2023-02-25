@@ -41,7 +41,8 @@
         "^db:generate"
       ],
       "outputs": [
-        ".next/**"
+        ".next/**",
+        "dist/**"
       ]
     },
     "lint": {},

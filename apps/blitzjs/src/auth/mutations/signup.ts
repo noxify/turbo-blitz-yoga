@@ -1,7 +1,7 @@
 import { SecurePassword } from "@blitzjs/auth"
 import { resolver } from "@blitzjs/rpc"
 import db from "db"
-import { defineAbilitiesFor, Roles } from "@acme/permissions"
+import { Roles } from "@acme/permissions"
 import { Signup } from "../validations"
 
 export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, ctx) => {
@@ -11,7 +11,6 @@ export default resolver.pipe(resolver.zod(Signup), async ({ email, password }, c
     select: { id: true, name: true, email: true, role: true },
   })
 
-  await ctx.session.$create({ userId: user.id, role: user.role as Roles })
-  ctx.session.$setPrivateData({ ability: defineAbilitiesFor(user) })
+  await ctx.session.$create({ userId: user.id, role: user.role })
   return user
 })
