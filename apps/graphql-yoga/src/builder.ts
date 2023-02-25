@@ -1,5 +1,9 @@
 import { DateResolver, DateTimeResolver } from "graphql-scalars"
 import SchemaBuilder from "@pothos/core"
+import PrismaPlugin from "@pothos/plugin-prisma"
+import type PrismaTypes from "@acme/db/prisma/pothos-types"
+import RelayPlugin from "@pothos/plugin-relay"
+
 import {
   createStringFieldComparison,
   createIntFieldComparison,
@@ -10,7 +14,14 @@ import {
   createBooleanFieldComparison,
 } from "src/comparison.js"
 
-export type Context = {}
+import ScopeAuthPlugin from "@pothos/plugin-scope-auth"
+import { JWTPayload } from "jose"
+import { GraphQLError } from "graphql"
+import { db, Prisma } from "@acme/db"
+
+type Context = {
+  currentUser: JWTPayload | null
+}
 
 export const builder = new SchemaBuilder<{
   Context: Context
@@ -28,8 +39,51 @@ export const builder = new SchemaBuilder<{
       Input: Date
     }
   }
+  AuthScopes: {
+    hasPermission: string[]
+  }
+  PrismaTypes: PrismaTypes
 }>({
-  plugins: [],
+  plugins: [RelayPlugin, PrismaPlugin, ScopeAuthPlugin],
+  prisma: {
+    client: db,
+    // defaults to false, uses /// comments from prisma schema as descriptions
+    // for object types, relations and exposed fields.
+    // descriptions can be omitted by setting description to false
+    exposeDescriptions: false,
+    // use where clause from prismaRelatedConnection for totalCount (will true by default in next major version)
+    filterConnectionTotalCount: true,
+    dmmf: Prisma.dmmf,
+  },
+  relayOptions: {
+    // These will become the defaults in the next major version
+    clientMutationId: "omit",
+    cursorType: "String",
+  },
+  authScopes: async (context) => ({
+    hasPermission: (permission: string[]) => {
+      if (!context.currentUser) {
+        throw new GraphQLError("Unauthorized", {
+          extensions: {
+            code: "UNAUTHORIZED",
+          },
+        })
+      }
+
+      // const permissionCheck = context?.currentUser?.realm_access?.roles.some(
+      //   (r) => permission.indexOf(r) !== -1
+      // )
+
+      // if (!permissionCheck) {
+      //   throw new GraphQLError("It seems you have not enough permission to do this.", {
+      //     extensions: {
+      //       code: 403,
+      //     },
+      //   })
+      // }
+      return true
+    },
+  }),
 })
 
 builder.queryType()

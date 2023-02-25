@@ -1,0 +1,28 @@
+{
+  "name": "@acme/oauth-mock",
+  "version": "0.0.0",
+  "description": "OAuth Mock Server",
+  "type": "module",
+  "scripts": {
+    "clean": "rm -rf .turbo node_modules",
+    "dev": "pnpm with-env tsx watch src/server.ts",
+    "with-env": "dotenv -c -e ../../.env --"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "dotenv-cli": "7.0.0",
+    "oauth2-mock-server": "5.0.2",
+    "typescript": "4.9.5",
+    "tsx": "3.12.3",
+    "@types/node": "18.14.0",
+    "@typescript-eslint/eslint-plugin": "5.53.0",
+    "@typescript-eslint/parser": "5.53.0",
+    "eslint": "8.34.0",
+    "eslint-config-prettier": "8.6.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "eslint-plugin-unused-imports": "2.0.0",
+    "prettier": "2.8.4",
+    "basic-auth": "2.0.1",
+    "@types/basic-auth": "1.1.3"
+  }
+}

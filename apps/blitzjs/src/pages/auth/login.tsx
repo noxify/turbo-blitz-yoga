@@ -1,19 +1,17 @@
 import { BlitzPage } from "@blitzjs/next"
 import Layout from "src/core/layouts/Layout"
-import { LoginForm } from "src/auth/components/LoginForm"
 import { useRouter } from "next/router"
+import Link from "next/link"
 
 const LoginPage: BlitzPage = () => {
   const router = useRouter()
 
   return (
     <Layout title="Log In">
-      <LoginForm
-        onSuccess={(_user) => {
-          const next = router.query.next ? decodeURIComponent(router.query.next as string) : "/"
-          return router.push(next)
-        }}
-      />
+      <p>
+        <Link href={"/api/auth/mock1"}>Sign in as Mock User - Member</Link>
+      </p>
+      <Link href={"/api/auth/mock2"}>Sign in as Mock User - Admin</Link>
     </Layout>
   )
 }

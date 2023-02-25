@@ -32,6 +32,9 @@
       "cache": false
     },
     "dev": {
+      "dependsOn": [
+        "^db:generate"
+      ],
       "persistent": true,
       "cache": false
     },
