@@ -39,7 +39,6 @@
     "@pothos/plugin-relay": "3.37.0"
   },
   "devDependencies": {
-    "@prisma/client": "4.10.1",
     "dotenv-cli": "7.0.0",
     "@types/node": "18.14.0",
     "@typescript-eslint/eslint-plugin": "5.53.0",

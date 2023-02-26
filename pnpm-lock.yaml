@@ -109,7 +109,6 @@ importers:
       '@pothos/plugin-prisma': 3.41.1
       '@pothos/plugin-relay': 3.37.0
       '@pothos/plugin-scope-auth': 3.18.0
-      '@prisma/client': 4.10.1
       '@types/node': 18.14.0
       '@typescript-eslint/eslint-plugin': 5.53.0
       '@typescript-eslint/parser': 5.53.0
@@ -134,7 +133,7 @@ importers:
       '@envelop/generic-auth': 5.0.6_adj6itjezth6avcd67ktx7eo6a
       '@graphql-yoga/render-graphiql': 3.7.0_graphql-yoga@3.7.0
       '@pothos/core': 3.26.0_graphql@16.6.0
-      '@pothos/plugin-prisma': 3.41.1_lzn73ix7dcck2ecqvhul3jbpzq
+      '@pothos/plugin-prisma': 3.41.1_j7x5c7cozepeuudqky2ea6lgb4
       '@pothos/plugin-relay': 3.37.0_u5kwwlkniuxa3qyechcchrsdfq
       '@pothos/plugin-scope-auth': 3.18.0_u5kwwlkniuxa3qyechcchrsdfq
       graphql: 16.6.0
@@ -143,7 +142,6 @@ importers:
       jose: 4.12.0
       zod: 3.20.6
     devDependencies:
-      '@prisma/client': 4.10.1
       '@types/node': 18.14.0
       '@typescript-eslint/eslint-plugin': 5.53.0_ny4s7qc6yg74faf3d6xty2ofzy
       '@typescript-eslint/parser': 5.53.0_7kw3g6rralp5ps6mg3uyzz6azm
@@ -3465,7 +3463,7 @@ packages:
     dependencies:
       graphql: 16.6.0
 
-  /@pothos/plugin-prisma/3.41.1_lzn73ix7dcck2ecqvhul3jbpzq:
+  /@pothos/plugin-prisma/3.41.1_j7x5c7cozepeuudqky2ea6lgb4:
     resolution: {integrity: sha512-O5MPZUQqqLFfEczFayXxj2R3yUbXtN+I18/XvzJN3rg0eFvqI0ciPpivXY2ezGRLNUtTnB1/saTb+W4ck8qQyg==}
     hasBin: true
     peerDependencies:
@@ -3475,7 +3473,6 @@ packages:
       typescript: '>=4.7.2'
     dependencies:
       '@pothos/core': 3.26.0_graphql@16.6.0
-      '@prisma/client': 4.10.1
       '@prisma/generator-helper': 4.10.1
       graphql: 16.6.0
       typescript: 4.9.5
@@ -3521,18 +3518,6 @@ packages:
       graphql: 16.6.0
     dev: false
 
-  /@prisma/client/4.10.1:
-    resolution: {integrity: sha512-VonXLJZybdt8e5XZH5vnIGCRNnIh6OMX1FS3H/yzMGLT3STj5TJ/OkMcednrvELgk8PK89Vo3aSh51MWNO0axA==}
-    engines: {node: '>=14.17'}
-    requiresBuild: true
-    peerDependencies:
-      prisma: '*'
-    peerDependenciesMeta:
-      prisma:
-        optional: true
-    dependencies:
-      '@prisma/engines-version': 4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19
-
   /@prisma/client/4.10.1_prisma@4.10.1:
     resolution: {integrity: sha512-VonXLJZybdt8e5XZH5vnIGCRNnIh6OMX1FS3H/yzMGLT3STj5TJ/OkMcednrvELgk8PK89Vo3aSh51MWNO0axA==}
     engines: {node: '>=14.17'}
@@ -3559,6 +3544,7 @@ packages:
 
   /@prisma/engines-version/4.10.1-2.aead147aa326ccb985dcfed5b065b4fdabd44b19:
     resolution: {integrity: sha512-tsjTho7laDhf9EJ9EnDxAPEf7yrigSMDhniXeU4YoWc7azHAs4GPxRi2P9LTFonmHkJLMOLjR77J1oIP8Ife1w==}
+    dev: false
 
   /@prisma/engines/4.10.1:
     resolution: {integrity: sha512-B3tcTxjx196nuAu1GOTKO9cGPUgTFHYRdkPkTS4m5ptb2cejyBlH9X7GOfSt3xlI7p4zAJDshJP4JJivCg9ouA==}
