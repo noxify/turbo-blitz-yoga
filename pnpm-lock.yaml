@@ -102,8 +102,8 @@ importers:
   apps/graphql-yoga:
     specifiers:
       '@acme/db': '*'
+      '@acme/guard': '*'
       '@envelop/core': 3.0.6
-      '@envelop/generic-auth': 5.0.6
       '@graphql-yoga/render-graphiql': 3.7.0
       '@pothos/core': 3.26.0
       '@pothos/plugin-prisma': 3.41.1
@@ -129,8 +129,8 @@ importers:
       zod: 3.20.6
     dependencies:
       '@acme/db': link:../../packages/db
+      '@acme/guard': link:../../packages/guard
       '@envelop/core': 3.0.6
-      '@envelop/generic-auth': 5.0.6_adj6itjezth6avcd67ktx7eo6a
       '@graphql-yoga/render-graphiql': 3.7.0_graphql-yoga@3.7.0
       '@pothos/core': 3.26.0_graphql@16.6.0
       '@pothos/plugin-prisma': 3.41.1_j7x5c7cozepeuudqky2ea6lgb4
@@ -2585,30 +2585,6 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@envelop/extended-validation/2.0.6_adj6itjezth6avcd67ktx7eo6a:
-    resolution: {integrity: sha512-aXAf1bg5Z71YfEKLCZ8OMUZAOYPGHV/a+7avd5TIMFNDxl5wJTmIonep3T+kdMpwRInDphfNPGFD0GcGdGxpHg==}
-    peerDependencies:
-      '@envelop/core': ^3.0.6
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      '@envelop/core': 3.0.6
-      '@graphql-tools/utils': 8.13.1_graphql@16.6.0
-      graphql: 16.6.0
-      tslib: 2.5.0
-    dev: false
-
-  /@envelop/generic-auth/5.0.6_adj6itjezth6avcd67ktx7eo6a:
-    resolution: {integrity: sha512-4z4juF7Is0oitymc0kcPK9bBAnB2Anyf9QBqe0Muh0NtkF8PrloUb3E+JzwHlDY8bVSESj0G+MpJOFNU2fjrJg==}
-    peerDependencies:
-      '@envelop/core': ^3.0.6
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0
-    dependencies:
-      '@envelop/core': 3.0.6
-      '@envelop/extended-validation': 2.0.6_adj6itjezth6avcd67ktx7eo6a
-      graphql: 16.6.0
-      tslib: 2.5.0
-    dev: false
-
   /@envelop/types/3.0.2:
     resolution: {integrity: sha512-pOFea9ha0EkURWxJ/35axoH9fDGP5S2cUu/5Mmo9pb8zUf+TaEot8vB670XXihFEn/92759BMjLJNWBKmNhyng==}
     dependencies:
@@ -3095,15 +3071,6 @@ packages:
       graphql: 16.6.0
       tslib: 2.5.0
       value-or-promise: 1.0.12
-    dev: false
-
-  /@graphql-tools/utils/8.13.1_graphql@16.6.0:
-    resolution: {integrity: sha512-qIh9yYpdUFmctVqovwMdheVNJqFh+DQNWIhX87FJStfXYnmweBUDATok9fWPleKeFwxnW8IapKmY8m8toJEkAw==}
-    peerDependencies:
-      graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-    dependencies:
-      graphql: 16.6.0
-      tslib: 2.5.0
     dev: false
 
   /@graphql-tools/utils/9.2.1_graphql@16.6.0:

@@ -1,4 +1,4 @@
-import { db, Prisma } from "@acme/db"
+import { db, Prisma, Todo } from "@acme/db"
 import { GuardBuilder } from "."
 
 type ExtendedResourceTypes = Prisma.ModelName
@@ -9,30 +9,21 @@ const GuardHandler = GuardBuilder<ExtendedResourceTypes, ExtendedAbilityTypes>(
     cannot("manage", "all")
 
     if (ctx.session.$isAuthorized() == true) {
-      switch (ctx.session.role) {
-        case "admin":
-          can("manage", "all")
-          break
-
-        case "member":
-        default:
-          can("create", "Todo")
-          can("read", "Todo")
-          can("update", "Todo", async (_args) => {
-            return (
-              (await db.todo.count({
-                where: {
-                  //userId: { not: { equals: ctx.session.userId } },
-                  userId: { equals: ctx.session.userId },
-                  id: { equals: _args.id as number },
-                },
-              })) === 1
-            )
-          }).reason(
-            "You have not the permission to update todos from other users",
+      if (ctx.session.role === "admin") {
+        can("manage", "all")
+      } else {
+        can("create", "Todo")
+        can("read", "Todo")
+        can("update", "Todo", async (todoRecord: Todo) => {
+          return (
+            (await db.todo.count({
+              where: {
+                userId: { equals: ctx.session.userId },
+                id: { equals: todoRecord.id },
+              },
+            })) === 1
           )
-
-          break
+        })
       }
     }
   },

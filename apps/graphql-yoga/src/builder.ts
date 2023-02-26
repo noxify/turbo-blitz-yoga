@@ -15,16 +15,21 @@ import {
 } from "src/comparison.js"
 
 import ScopeAuthPlugin from "@pothos/plugin-scope-auth"
-import { JWTPayload } from "jose"
 import { db, Prisma } from "@acme/db"
 import { createGraphQLError } from "graphql-yoga"
+import { AbilityType, GuardHandler } from "@acme/guard"
 
-type Context = {
-  currentUser: JWTPayload | null
+export type SessionContext = {
+  userId: number
+  role: string
+  $isAuthorized: () => boolean
+}
+export type Ctx = {
+  session: SessionContext
 }
 
 export const builder = new SchemaBuilder<{
-  Context: Context
+  Context: Ctx
   Scalars: {
     ID: {
       Output: number | string
@@ -42,9 +47,9 @@ export const builder = new SchemaBuilder<{
   AuthScopes: {
     isAuthorized: boolean
     hasPermission: {
-      action: string
+      action: AbilityType<"">
       resource: Prisma.ModelName
-      record?: any
+      query?: any
     }
   }
 
@@ -71,7 +76,7 @@ export const builder = new SchemaBuilder<{
   },
   authScopes: async (context) => ({
     isAuthorized: async () => {
-      if (!context.currentUser) {
+      if (!context.session || !context.session.$isAuthorized()) {
         throw createGraphQLError("Unauthorized", {
           extensions: {
             code: "UNAUTHORIZED",
@@ -85,29 +90,21 @@ export const builder = new SchemaBuilder<{
       return true
     },
 
-    hasPermission: async ({ action, resource, record }) => {
-      console.log({ action, resource, record })
+    hasPermission: async ({ action, resource, query }) => {
+      const { can } = await GuardHandler.can(action, resource, context, query)
 
-      // if (!context.currentUser) {
-      //   throw new GraphQLError("Unauthorized", {
-      //     extensions: {
-      //       code: "UNAUTHORIZED",
-      //     },
-      //   })
-      // }
+      if (!can) {
+        throw createGraphQLError("Forbidden", {
+          extensions: {
+            code: "FORBIDDEN",
+            http: {
+              status: 403,
+            },
+          },
+        })
+      }
 
-      // const permissionCheck = context?.currentUser?.realm_access?.roles.some(
-      //   (r) => permission.indexOf(r) !== -1
-      // )
-
-      // if (!permissionCheck) {
-      //   throw new GraphQLError("It seems you have not enough permission to do this.", {
-      //     extensions: {
-      //       code: 403,
-      //     },
-      //   })
-      // }
-      return true
+      return can
     },
   }),
 })
