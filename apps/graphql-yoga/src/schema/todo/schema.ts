@@ -1,6 +1,12 @@
 import { db } from "@acme/db"
-
-import { builder, IntFieldComparison, SortDirection, StringFieldComparison } from "src/builder.js"
+import { queryFromInfo } from "@pothos/plugin-prisma"
+import {
+  builder,
+  IntFieldComparison,
+  SortDirection,
+  StringFieldComparison,
+  Paging,
+} from "src/builder.js"
 
 const FilterInput = builder.inputRef("TodoFilterInput").implement({
   fields: (t) => ({
@@ -27,64 +33,74 @@ const SortingInput = builder.inputType("TodoSortOrder", {
   }),
 })
 
-builder.prismaObject("User", {
+export const PrismaTodo = builder.prismaObject("Todo", {
   fields: (t) => ({
-    id: t.exposeID("id"),
-    email: t.exposeString("email"),
-    //todos: t.relation("todos"),
+    id: t.exposeInt("id"),
+    title: t.exposeString("title", { nullable: true }),
+    description: t.exposeString("description", { nullable: true }),
+    user: t.relation("user"),
   }),
 })
 
-builder.prismaObject("Todo", {
+export const PrismaTodoUser = builder.prismaObject("User", {
   fields: (t) => ({
-    id: t.exposeInt("id"),
-    // not sure why this throws an ts error
-    // @ts-expect-error
-    title: t.exposeString("title"),
-    // not sure why this throws an ts error
-    // @ts-expect-error
-    description: t.exposeString("description"),
-    user: t.relation("user", {}),
+    email: t.exposeString("email"),
   }),
 })
 
 builder.queryFields((t) => ({
-  todos: t.prismaConnection({
-    type: "Todo",
-    cursor: "id",
-    args: {
-      filter: t.arg({ type: FilterInput, required: false }),
-      sorting: t.arg({ type: [SortingInput], required: false }),
-    },
-    totalCount: (connection, args, context, info) => {
-      return db.todo.count({ where: args.filter || {} })
-    },
-    resolve: function (query, parent, args, context, info) {
-      const customOrderBy = {}
-      for (const orderElement of args.sorting || []) {
-        customOrderBy[orderElement.field as string] = orderElement.direction?.toLowerCase()
-      }
-
-      return db.todo.findMany({
-        ...query,
-        where: args.filter || {},
-
-        orderBy: customOrderBy,
-      })
-    },
-  }),
   todo: t.prismaField({
-    type: "Todo",
+    // authScopes: (todo, args, context, info) => {
+    //   console.log({ todo, args, context, info })
+    //   return {
+    //     isAuthorized: true,
+    //     hasPermission: { action: "read", resource: "Todo", record: todo },
+    //   }
+    // },
+    // authScopes: {
+    //   //isAuthorized: false,
+    // },
+    type: PrismaTodo,
     args: {
       id: t.arg({ type: "Int", required: true }),
     },
-    resolve(query, parent, args, context, info) {
-      return db.todo.findFirstOrThrow({
-        ...query,
-        where: {
-          id: { equals: args.id },
-        },
+    resolve: async (query, parent, args, context, info) => {
+      return db.todo.findUniqueOrThrow({
+        ...queryFromInfo({ context, info }),
+        where: { id: args.id },
       })
+    },
+  }),
+
+  todos: t.prismaConnection({
+    type: PrismaTodo,
+    cursor: "id",
+    args: {
+      filter: t.arg({ type: FilterInput, required: false }),
+      paging: t.arg({ type: Paging, required: false }),
+      sorting: t.arg({ type: [SortingInput], required: false }),
+    },
+    // authScopes: {
+    //   //isAuthorized: false,
+    // },
+    totalCount: (parent, args, context, info) => db.todo.count({ where: args.filter || {} }),
+    resolve: async (query, parent, args, context, info) => {
+      return await db.todo.findMany({
+        ...query,
+        where: args.filter || {},
+      })
+    },
+  }),
+}))
+
+builder.mutationFields((t) => ({
+  createTodo: t.prismaField({
+    type: PrismaTodo,
+    args: {
+      title: t.arg({ type: "String", required: true }),
+    },
+    resolve: async (query, parent, args, context, info) => {
+      return db.todo.create({ ...query, data: { ...args, userId: 1 } })
     },
   }),
 }))

@@ -16,8 +16,8 @@ import {
 
 import ScopeAuthPlugin from "@pothos/plugin-scope-auth"
 import { JWTPayload } from "jose"
-import { GraphQLError } from "graphql"
 import { db, Prisma } from "@acme/db"
+import { createGraphQLError } from "graphql-yoga"
 
 type Context = {
   currentUser: JWTPayload | null
@@ -40,8 +40,14 @@ export const builder = new SchemaBuilder<{
     }
   }
   AuthScopes: {
-    hasPermission: string[]
+    isAuthorized: boolean
+    hasPermission: {
+      action: string
+      resource: Prisma.ModelName
+      record?: any
+    }
   }
+
   PrismaTypes: PrismaTypes
 }>({
   plugins: [RelayPlugin, PrismaPlugin, ScopeAuthPlugin],
@@ -60,15 +66,35 @@ export const builder = new SchemaBuilder<{
     clientMutationId: "omit",
     cursorType: "String",
   },
+  scopeAuthOptions: {
+    runScopesOnType: true,
+  },
   authScopes: async (context) => ({
-    hasPermission: (permission: string[]) => {
+    isAuthorized: async () => {
       if (!context.currentUser) {
-        throw new GraphQLError("Unauthorized", {
+        throw createGraphQLError("Unauthorized", {
           extensions: {
             code: "UNAUTHORIZED",
+            http: {
+              status: 401,
+            },
           },
         })
       }
+
+      return true
+    },
+
+    hasPermission: async ({ action, resource, record }) => {
+      console.log({ action, resource, record })
+
+      // if (!context.currentUser) {
+      //   throw new GraphQLError("Unauthorized", {
+      //     extensions: {
+      //       code: "UNAUTHORIZED",
+      //     },
+      //   })
+      // }
 
       // const permissionCheck = context?.currentUser?.realm_access?.roles.some(
       //   (r) => permission.indexOf(r) !== -1
@@ -87,6 +113,7 @@ export const builder = new SchemaBuilder<{
 })
 
 builder.queryType()
+builder.mutationType()
 
 export const SortDirection = builder.enumType("SortDirection", {
   values: ["ASC", "DESC"] as const,
